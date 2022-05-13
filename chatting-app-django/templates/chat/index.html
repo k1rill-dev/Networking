@@ -4,6 +4,7 @@
     <head>
       <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"  media="screen,projection"/>
@@ -21,8 +22,8 @@
     {% block body %}
         <div class="section blue lighten-3">
             <div class="container white-text center-align text">
-            <h2>A special Chat for Khidmah IT.</h2>
-            <p>A Chatting App.</p>
+            <h2>СУПИР ПУПИР ЧАТ.</h2>
+            <p>Готовьте ведра, отвечаю - жюри потечет.</p>
             </div>
         </div>
         <div class="container">
@@ -32,29 +33,29 @@
                 <div>
                     {% block form %}
                     <h3>
-                    Login
+                    Вход
                     </h3>
                     <form id="login-form" class="form-group" method="post">
                         {% csrf_token %}
                         <div class="row">
                             <div class="input-field col s12">
                                 <input name="username" id="id_username" type="text">
-                                <label for="id_username">Username</label>
+                                <label for="id_username">Имя</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
                                 <input name="password" id="id_password" type="password">
-                                <label for="id_password">Password</label>
+                                <label for="id_password">Пароль</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s8">
-                                <a href="{% url 'register' %}">Register</a>
+                                <a href="{% url 'register' %}">Регистрация</a>
                             </div>
                             <div class="col s4">
                             <div class="right">
-                                <button class="btn blue waves-effect waves-light pull-s12">Login</button>
+                                <button class="btn blue waves-effect waves-light pull-s12">Вход</button>
                             </div>
                             </div>
                         </div>

@@ -9,6 +9,7 @@ function scrolltoend() {
     }, 800);
 }
 
+
 function send(sender, receiver, message) {
     $.post('/api/messages/', '{"sender": "'+ sender +'", "receiver": "'+ receiver +'","message": "'+ message +'" }', function (data) {
         console.log(data);
