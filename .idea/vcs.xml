@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chatting-app-django" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chatting-app-django/django-channels-chat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chatty" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django-channels-chat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_private_chat2" vcs="Git" />
+  </component>
+</project>
