@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
+# class MyUser(AbstractUser):
+#     address = models.CharField(max_length=30, blank=True)
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')

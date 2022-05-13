@@ -35,10 +35,10 @@ class SearchResultsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        object_list = User.objects.filter(
-            Q(name__icontains=query) | Q(state__icontains=query)
-        )
-        return object_list
+        users_d = User.objects.filter(Q(pk__icontains=query))
+        users = [i for i in users_d]
+        print(users)
+        return users
 
 @csrf_exempt
 def message_list(request, sender=None, receiver=None):

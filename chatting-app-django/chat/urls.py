@@ -12,5 +12,6 @@ urlpatterns = [
     path('logout/', logout, {'next_page': 'index'}, name='logout'),
     path('register/', views.register_view, name='register'),
     path('user/', views.user, name='user'),
+    # поиск юзеров
     path('search_users/', views.SearchResultsView.as_view(), name='search'),
 ]
