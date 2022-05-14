@@ -24,12 +24,5 @@ class Message(models.Model):
     class Meta:
         ordering = ('timestamp',)
 
-# class ChatRoom(models.Model):
-#     room_name = models.CharField(max_length = 30)
-#     room_size = models.IntegerField(default=5)
-#     room_code = models.CharField(max_length=5)
-#     members = models.ManyToManyField(User)
-#     creation_date = models.DateTimeField(auto_now=True)
-#
-#     def __str__(self):
-#         return f'{self.pk}-{self.room_name}'
+class Room(models.Model):
+    name= models.CharField(max_length=20)

@@ -2,15 +2,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http.response import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from .models import Message, Profile
+from .models import Message, Profile, Room
 from .forms import SignUpForm
 from .serializers import MessageSerializer, UserSerializer
 from . import RSA
@@ -29,6 +25,7 @@ def index(request):
         else:
             return HttpResponse('{"error": "User does not exist"}')
         return redirect('chats')
+
 
 def logout_user(request):
     logout(request)
@@ -85,6 +82,7 @@ def message_list(request, sender=None, receiver=None):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
+
 def register_view(request):
     if request.method == 'POST':
         print("working1")
@@ -117,7 +115,6 @@ def register_view(request):
     return render(request, template, context)
 
 
-
 def chat_view(request):
     if not request.user.is_authenticated:
         return redirect('index')
@@ -134,9 +131,11 @@ def message_view(request, sender, receiver):
         rsa = RSA.Rsa()
         secret_key1 = Profile.objects.get(user=receiver)
         secret_key2 = Profile.objects.get(user=sender)
-        list1 = [(rsa.decript(i.message, secret_key1.secret_key), 1, i.timestamp) for i in Message.objects.filter(sender_id=sender, receiver_id=receiver)]
-        list2 = [(rsa.decript(i.message, secret_key2.secret_key), 0, i.timestamp) for i in Message.objects.filter(sender_id=receiver, receiver_id=sender)]
-        a = sorted(list2+list1, key=lambda x: x[-1])
+        list1 = [(rsa.decript(i.message, secret_key1.secret_key), 1, i.timestamp) for i in
+                 Message.objects.filter(sender_id=sender, receiver_id=receiver)]
+        list2 = [(rsa.decript(i.message, secret_key2.secret_key), 0, i.timestamp) for i in
+                 Message.objects.filter(sender_id=receiver, receiver_id=sender)]
+        a = sorted(list2 + list1, key=lambda x: x[-1])
         print(a)
         # qwerty = Message.objects.filter(sender_id=sender, receiver_id=receiver)
         return render(request, "chat/messages.html",
@@ -145,34 +144,19 @@ def message_view(request, sender, receiver):
                        'messages': a})
 
 
+def room(request):
+    rooms = Room.objects.all()
+    if "room" in request.POST:
+        room = Room()
+        room.name = request.POST["room"]
+        room.save()
+        return render(request, "chat/room.html", {"room": rooms})
+    return render(request, "chat/room.html", {"room": rooms})
 
-# class GetOrCreateRoomApi(APIView):
-#
-#     permission_classes = (IsAuthenticated,)
-#
-#     # get the rooms in which the user is enrolled
-#     def get(self, request):
-#         user = self.get_user(request)
-#         rooms = user.chatroom_set.all()
-#         serializer = ChatRoomSerializer(rooms, many=True)
-#         # serializer.is_valid(raise_exception=True)
-#         return Response(serializer.data)
-#
-#
-#     def post(self, request):
-#         serializer = ChatRoomSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data)
-#
-# class JoinRoomApi(APIView):
-#
-#     permission_classes = (IsAuthenticated,)
-#
-#     def post(self, request):
-#         serializer = AddUserToRoomSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         res = serializer.save()
-#         if res is None:
-#             return Response({"error":"Can not Register You to Room"})
-#         return Response(serializer.data)
+
+def selectRoom(request):
+    if "room" in request.POST:
+        roomData = request.POST["room"].split(',')
+        request.session["roomId"] = roomData[0]
+        request.session["roomName"] = roomData[1]
+        return redirect('/chat')
