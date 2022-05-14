@@ -6,9 +6,9 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from rest_framework.parsers import JSONParser
-from chat.models import Message, Profile
-from chat.forms import SignUpForm
-from chat.serializers import MessageSerializer, UserSerializer
+from .models import Message, Profile
+from .forms import SignUpForm
+from .serializers import MessageSerializer, UserSerializer
 from . import RSA
 
 
@@ -118,6 +118,7 @@ def message_view(request, sender, receiver):
     if not request.user.is_authenticated:
         return redirect('index')
     if request.method == "GET":
+        print()
         rsa = RSA.Rsa()
         secret_key1 = Profile.objects.get(user=receiver)
         secret_key2 = Profile.objects.get(user=sender)
