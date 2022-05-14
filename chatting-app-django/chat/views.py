@@ -2,10 +2,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http.response import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Message, Profile
 from .forms import SignUpForm
 from .serializers import MessageSerializer, UserSerializer
@@ -50,12 +54,11 @@ class SearchResultsView(ListView):
 @csrf_exempt
 def message_list(request, sender=None, receiver=None):
     if request.method == 'GET':
-
         rsa = RSA.Rsa()
         secret_key = Profile.objects.get(user=receiver)
         messages = Message.objects.filter(sender_id=sender, receiver_id=receiver, is_read=False)
-        for messag in messages:
-            print((messag.message))
+        # for messag in messages:
+        #     print((messag.message))
         serializer = MessageSerializer(messages, many=True, context={'request': request})
         for message in messages:
             message.is_read = True
@@ -68,14 +71,19 @@ def message_list(request, sender=None, receiver=None):
         print(user_id.id)
         open_key = Profile.objects.get(user=user_id.id)
         print(open_key.open_key)
-        rsa1 = RSA.Rsa()
-        data['message'] = rsa1.encript(data['message'], open_key.open_key)
+        rsa = RSA.Rsa()
+        aes = RSA.Aes()
+
+        aes_key = aes.print_key()
+        key_aes_enc = rsa.encript(aes_key, open_key.open_key)
+        open_key.aes_key = key_aes_enc
+        open_key.save()
+        data['message'] = aes.enc_aes(data['message'], aes_key)
         serializer = MessageSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -95,7 +103,6 @@ def register_view(request):
             key = Profile()
             key.secret_key = rsa.get_secret_key()
             key.open_key = rsa.get_open_key()
-            key.aes_key = aes.print_key()
             key.user = int(user.id)
             key.save()
             if user is not None:
@@ -136,3 +143,36 @@ def message_view(request, sender, receiver):
                       {'users': User.objects.exclude(username=request.user.username),
                        'receiver': User.objects.get(id=receiver),
                        'messages': a})
+
+
+
+# class GetOrCreateRoomApi(APIView):
+#
+#     permission_classes = (IsAuthenticated,)
+#
+#     # get the rooms in which the user is enrolled
+#     def get(self, request):
+#         user = self.get_user(request)
+#         rooms = user.chatroom_set.all()
+#         serializer = ChatRoomSerializer(rooms, many=True)
+#         # serializer.is_valid(raise_exception=True)
+#         return Response(serializer.data)
+#
+#
+#     def post(self, request):
+#         serializer = ChatRoomSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+#
+# class JoinRoomApi(APIView):
+#
+#     permission_classes = (IsAuthenticated,)
+#
+#     def post(self, request):
+#         serializer = AddUserToRoomSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         res = serializer.save()
+#         if res is None:
+#             return Response({"error":"Can not Register You to Room"})
+#         return Response(serializer.data)
