@@ -119,8 +119,15 @@ def message_view(request, sender, receiver):
     if not request.user.is_authenticated:
         return redirect('index')
     if request.method == "GET":
+        rsa = RSA.Rsa()
+        secret_key1 = Profile.objects.get(user=receiver)
+        secret_key2 = Profile.objects.get(user=sender)
+        list1 = [(rsa.decript(i.message, secret_key1.secret_key), 1, i.timestamp) for i in Message.objects.filter(sender_id=sender, receiver_id=receiver)]
+        list2 = [(rsa.decript(i.message, secret_key2.secret_key), 0, i.timestamp) for i in Message.objects.filter(sender_id=receiver, receiver_id=sender)]
+        a = sorted(list2+list1, key=lambda x: x[-1])
+
+        # qwerty = Message.objects.filter(sender_id=sender, receiver_id=receiver)
         return render(request, "chat/messages.html",
                       {'users': User.objects.exclude(username=request.user.username),
                        'receiver': User.objects.get(id=receiver),
-                       'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) |
-                                   Message.objects.filter(sender_id=receiver, receiver_id=sender)})
+                       'messages': a})

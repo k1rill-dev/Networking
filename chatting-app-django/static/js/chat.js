@@ -20,7 +20,7 @@ function send(sender, receiver, message) {
     })
 }
 
-function receive() {
+function receive(sender_id, receiver_id, data) {
     $.get('/api/messages/'+ sender_id + '/' + receiver_id, function (data) {
         console.log(data);
         if (data.length !== 0)

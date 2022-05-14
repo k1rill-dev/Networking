@@ -2,15 +2,15 @@
 {% block hide %}{% endblock %}
 {% block messages %}
     {% for message in messages %}
-    {% if message.sender == request.user %}
+    {% if message.1 == 1 %}
 <div class="card-panel right" style="width: 75%; position: relative">
     <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-receiver">You</div>
-    {{ message }}
+    {{ message.0 }}
 </div>
     {% else %}
 <div class="card-panel left blue lighten-5" style="width: 75%; position: relative">
-    <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-sender">{{ message.sender }}</div>
-    {{ message }}
+    <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-sender">Чувачек</div>
+    {{ message.0 }}
 </div>
     {% endif %}
     {% endfor %}
