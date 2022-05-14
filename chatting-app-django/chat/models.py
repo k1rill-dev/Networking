@@ -9,6 +9,7 @@ class Profile(models.Model):
     user = models.IntegerField(blank=True)
     open_key = models.CharField(max_length=100, blank=True)
     secret_key = models.CharField(max_length=100, blank=True)
+    aes_key = models.CharField(max_length=100, blank=True)
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')

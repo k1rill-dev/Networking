@@ -17,7 +17,7 @@
 <!--            <form action="{% url 'chats' %}" method="get">-->
 <!--                <input name="q" type="text" placeholder="Введите id друга...">-->
 <!--            </form>-->
-            <input id="select" placeholder="Введите id друга..."/>
+            <input id="select" placeholder="Введите имя друга..."/>
             <div class="collection">
                 {% block users %}
                 {% for user in users %}
@@ -37,6 +37,7 @@
         <div class="col s9">
             <div class="card">
             <div id="board" class="section grey lighten-3" style="height: 68vh; padding: 5px; overflow-y: scroll">
+
                 {% block messages %}
 
                 {% endblock %}
@@ -58,7 +59,7 @@
         </div>
     </div>
     </div>
-    {% load staticfiles %}
+    {% load static %}
     <script src="{% static 'js/chat.js' %}"></script>
     <script>
     $(document).ready(function() {

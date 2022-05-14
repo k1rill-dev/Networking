@@ -2,6 +2,7 @@
 import time
 
 a = time.time()
+import pyaes
 
 import base64
 from numba import njit
@@ -77,51 +78,30 @@ class Rsa:
 
 import time
 
-# aq = time.time()
-# rsa = Rsa()
-# a = rsa.get_open_key()
-# b = rsa.get_secret_key()
-# m = [int.from_bytes(base64.b64decode(a)[i:i + 7], byteorder='big') for i in
-#      range(0, len(base64.b64decode(a)), 7)]
-# print(m)
-# qwe = rsa.encript('тесвапвпвпвапвапвапвапвапт', a)
-# print(qwe)
-#
-# print(rsa.decript(qwe, b))
-# print(time.time() - aq)
+import base64
+import random
+import string
+import pyaes
 
-# import base64
-# import random
-# import string
-# import pyaes
-#
-#
-# class Aes:
-#     def __init__(self, size, key=None):
-#         # self.message = message
-#         self.size = size
-#         self.key = key
-#         if self.size == 256:
-#             self.key = ''.join(random.choice(string.ascii_lowercase) for i in range(self.size // 8))
-#         elif self.size == 128:
-#             self.key = ''.join(random.choice(string.ascii_lowercase) for i in range(self.size // 8))
-#
-#     def print_key(self):
-#         return self.key
-#
-#     def enc_aes(self, message):
-#         plaintext = message.encode('utf-8')
-#         key = self.key.encode('utf-8')
-#         aes = pyaes.AESModeOfOperationCTR(key)
-#         str_aes = aes.encrypt(plaintext)
-#         txt = base64.b64encode(str_aes)
-#         return txt.decode('utf-8')
-#
-#     def dec_aes(self, message, key):
-#         aes = pyaes.AESModeOfOperationCTR(key.encode('utf-8'))
-#         decrypted = aes.decrypt(message).decode('utf-8')
-#         return decrypted
 
-# aes = Aes(256)
-# print(aes.enc_aes('ghbdtnwerwerwerewrwerwerwer'))
-# print(aes.print_key())
+class Aes:
+    def __init__(self, key=None):
+        # self.message = message
+        self.key = ''.join(random.choice(string.ascii_lowercase) for i in range(32))
+
+    def print_key(self):
+        return self.key
+
+    def enc_aes(self, message, key=None):
+        plaintext = message.encode('utf-8')
+        key = key.encode('utf-8')
+        aes = pyaes.AESModeOfOperationCTR(key)
+        str_aes = aes.encrypt(plaintext)
+        txt = base64.b64encode(str_aes).decode('utf-8')
+        return txt
+
+    def dec_aes(self, message, key=None):
+        m = base64.b64decode(message)
+        aes = pyaes.AESModeOfOperationCTR(key.encode('utf-8'))
+        decrypted = aes.decrypt(m)
+        return decrypted.decode('utf-8')

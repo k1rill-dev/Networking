@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http.response import JsonResponse, HttpResponse
@@ -25,6 +25,10 @@ def index(request):
         else:
             return HttpResponse('{"error": "User does not exist"}')
         return redirect('chats')
+
+def logout_user(request):
+    logout(request)
+    return redirect('index')
 
 
 def user(request):
@@ -87,10 +91,11 @@ def register_view(request):
             # print(user.id, 13241234424244234)
             # Profile.objects.filter(id=user.id).update(secret_key='ddd', open_key='3123')
             rsa = RSA.Rsa()
-
+            aes = RSA.Aes()
             key = Profile()
             key.secret_key = rsa.get_secret_key()
             key.open_key = rsa.get_open_key()
+            key.aes_key = aes.print_key()
             key.user = int(user.id)
             key.save()
             if user is not None:
