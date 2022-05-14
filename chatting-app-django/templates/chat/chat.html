@@ -14,18 +14,21 @@
     <div class="row">
         <div class="col s3">
         <div class="card">
-            <form action="{% url 'chats' %}" method="get">
-                <input name="q" type="text" placeholder="Введите id друга...">
-            </form>
+<!--            <form action="{% url 'chats' %}" method="get">-->
+<!--                <input name="q" type="text" placeholder="Введите id друга...">-->
+<!--            </form>-->
+            <input name="q" id="select" placeholder="Введите id друга..."/>
             <div class="collection">
                 {% block users %}
                 {% for user in users %}
-                <a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="collection-item row">
+                <ul id="list">
+                    <li class="element"><a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="collection-item row">
                     <img src="https://frontend-1.adjust.com/new-assets/images/site-images/interface/user.svg" class="col s4">
                     <div class="col s8">
                     <span class="title" style="font-weight: bolder">{{ user }}</span>
                     </div>
-                </a>
+                </a></li>
+                </ul>
                 {% endfor %}
                 {% endblock %}
             </div>
@@ -58,6 +61,14 @@
     {% load staticfiles %}
     <script src="{% static 'js/chat.js' %}"></script>
     <script>
+    $(document).ready(function() {
+    var $elements = $('#list .element');
+    $('#select').on('keyup input', function() {
+        var value = this.value;
+        $elements.hide();
+        $elements.filter(':contains("' + value + '")').show();
+    });
+    });
         // For receiving
         sender_id = "{{ receiver.id }}";
         receiver_id = "{{ request.user.id }}";
