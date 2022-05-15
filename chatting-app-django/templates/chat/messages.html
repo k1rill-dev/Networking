@@ -3,15 +3,15 @@
 {% block messages %}
     {% for message in messages %}
     {% if message.1 == 1 %}
-<div class="card-panel right" style="width: 75%; position: relative">
-    <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-receiver">You</div>
+<ul class="card-panel right" style="width: 75%; position: relative">
+    <li style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-receiver">You</li>
     {{ message.0 }}
-</div>
+</ul>
     {% else %}
-<div class="card-panel left blue lighten-5" style="width: 75%; position: relative">
-    <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-sender">Чувачечек</div>
+<ul class="card-panel left blue lighten-5" style="width: 75%; position: relative">
+    <li style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title" id="msg-sender">Чувачечек</li>
     {{ message.0 }}
-</div>
+</ul>
     {% endif %}
     {% endfor %}
 <script>

@@ -1,0 +1,48 @@
+{% include 'chat/navigation.html' %}
+
+{% if request.user %}
+
+	{% if request.session.roomName == null  %}
+		<script type="text/javascript">
+			alert("Please Select Room before chat. . .")
+			window.location=" {% url 'room' %}"
+		</script>
+	{% endif %}
+	
+	
+
+<h3 class="text-center"> <kbd>Room: {{request.session.roomName}}</kbd></h3>
+<form  class="form-group"> 
+<!-- <form id='chat_form'>-->
+	<div class="container">
+	<div class='row'>
+		<div class = "col-sm-5"><input type='text' id='chat' name='chat' class="form-control"> </div>
+		<div class="col-sm-7"><input type='submit' value='Send' id = 'send' class="btn btn-success"></div>
+	</div>
+</div>
+</form>
+<div id="load_tweets"> </div>
+<script>
+$(document).on('click','#send',function(e){
+	e.preventDefault()
+	$.ajax({
+		url:'{% url "chat_rooms" %}',
+		data:{
+			chat:$('#chat').val(),
+		},
+		success:function(resp){
+			console.log(resp);
+			console.log('inside response')
+				//window.location="{% url 'chat_rooms' %}"
+		}
+	});
+});
+
+</script>
+
+{% else %}
+<script type="text/javascript">
+	alert("Please Login. . .")
+	window.location=" {% url 'index' %}"
+</script>
+{% endif %}

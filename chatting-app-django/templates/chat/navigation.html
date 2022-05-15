@@ -47,11 +47,11 @@ ul.dropdown-lr {
         <li><a href="{% url 'room'%}">Room</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-          {% if request.session.user %}
+          {% if request.user.is_authenticated %}
           <li class="dropdown">
-            <a href="{% url 'logout' %}" class="dropdown-toggle"> Здравствуй, {{ request.session.user }}</a>
+            <a href="{% url 'logout' %}" class="dropdown-toggle"> Выйти из аккаунта</a>
           </li>
-{% else %}
+            {% else %}
         <li class="dropdown">
           <a href="{% url 'register' %}" class="dropdown-toggle" >Регистрация</a>
          </li>
@@ -60,7 +60,7 @@ ul.dropdown-lr {
           <a href="{% url 'index' %}" class="dropdown-toggle">Войти</a>
 
         </li>
-{% endif %}
+        {% endif %}
 
       </ul>
     </div>

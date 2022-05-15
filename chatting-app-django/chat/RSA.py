@@ -105,3 +105,14 @@ class Aes:
         aes = pyaes.AESModeOfOperationCTR(key.encode('utf-8'))
         decrypted = aes.decrypt(m)
         return decrypted.decode('utf-8')
+
+
+rsa = Rsa()
+open_key_rsa = rsa.get_open_key()
+secret_key_rsa = rsa.get_secret_key()
+aes = Aes()
+key = aes.print_key()
+enc_m = aes.enc_aes('😒', key)
+enc_key = rsa.encript(key, open_key_rsa)
+dec_key = rsa.decript(enc_key, secret_key_rsa)
+aes.dec_aes(enc_m, dec_key)
